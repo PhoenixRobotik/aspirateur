@@ -30,6 +30,11 @@ int main(int argc, char const *argv[])
     kiwi = std::make_unique<BoardKiwi>();
     auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p6));
     Pilot pilot(fake_remote);
+    kiwi->statusLed.set(true);
+    // waits for vacuum cleaner main's board initialisation
+    kiwi->sleep_ms(6500);
+
+    kiwi->statusLed.set(false);
 
     while(1)
     {
@@ -41,19 +46,7 @@ int main(int argc, char const *argv[])
         kiwi->sleep_ms(500);
         pilot.reach(Pilot::TargetType::angle,  -360);
         kiwi->sleep_ms(500);
-        // fake_remote->send_trame(FakeRemote::Trame::avant);
-        // fake_remote->send_trame(FakeRemote::Trame::avant);
-        // fake_remote->send_trame(FakeRemote::Trame::avant);
-        // fake_remote->send_trame(FakeRemote::Trame::avant);
-        // fake_remote->send_trame(FakeRemote::Trame::avant);
-        // fake_remote->send_trame(FakeRemote::Trame::pause);
-        // fake_remote->send_trame(FakeRemote::Trame::arriere);
-        // fake_remote->send_trame(FakeRemote::Trame::arriere);
-        // fake_remote->send_trame(FakeRemote::Trame::arriere);
-        // fake_remote->send_trame(FakeRemote::Trame::arriere);
-        // fake_remote->send_trame(FakeRemote::Trame::arriere);
-        // fake_remote->send_trame(FakeRemote::Trame::pause);
-        kiwi->statusLed.toggle();
+        kiwi->activeLed.toggle();
     }
     while(1);
     return 0;
