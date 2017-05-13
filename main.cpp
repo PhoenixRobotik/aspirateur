@@ -1,5 +1,6 @@
 #include "board_kiwi.h"
 #include "fake_remote.h"
+#include "pilot.h"
 
 
 std::unique_ptr<BoardKiwi> kiwi = 0;
@@ -27,22 +28,31 @@ extern "C" {
 int main(int argc, char const *argv[])
 {
     kiwi = std::make_unique<BoardKiwi>();
+    auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p6));
+    Pilot pilot(fake_remote);
 
     while(1)
     {
-        FakeRemote fake_remote(Pin(PortB, Pin::p6));
-        fake_remote.send_trame(Trame::avant);
-        fake_remote.send_trame(Trame::avant);
-        fake_remote.send_trame(Trame::avant);
-        fake_remote.send_trame(Trame::avant);
-        fake_remote.send_trame(Trame::avant);
-        fake_remote.send_trame(Trame::pause);
-        fake_remote.send_trame(Trame::arriere);
-        fake_remote.send_trame(Trame::arriere);
-        fake_remote.send_trame(Trame::arriere);
-        fake_remote.send_trame(Trame::arriere);
-        fake_remote.send_trame(Trame::arriere);
-        fake_remote.send_trame(Trame::pause);
+        pilot.reach(Pilot::TargetType::distance,  1);
+        kiwi->sleep_ms(500);
+        pilot.reach(Pilot::TargetType::angle,  360);
+        kiwi->sleep_ms(500);
+        pilot.reach(Pilot::TargetType::distance, -1);
+        kiwi->sleep_ms(500);
+        pilot.reach(Pilot::TargetType::angle,  -360);
+        kiwi->sleep_ms(500);
+        // fake_remote->send_trame(FakeRemote::Trame::avant);
+        // fake_remote->send_trame(FakeRemote::Trame::avant);
+        // fake_remote->send_trame(FakeRemote::Trame::avant);
+        // fake_remote->send_trame(FakeRemote::Trame::avant);
+        // fake_remote->send_trame(FakeRemote::Trame::avant);
+        // fake_remote->send_trame(FakeRemote::Trame::pause);
+        // fake_remote->send_trame(FakeRemote::Trame::arriere);
+        // fake_remote->send_trame(FakeRemote::Trame::arriere);
+        // fake_remote->send_trame(FakeRemote::Trame::arriere);
+        // fake_remote->send_trame(FakeRemote::Trame::arriere);
+        // fake_remote->send_trame(FakeRemote::Trame::arriere);
+        // fake_remote->send_trame(FakeRemote::Trame::pause);
         kiwi->statusLed.toggle();
     }
     while(1);

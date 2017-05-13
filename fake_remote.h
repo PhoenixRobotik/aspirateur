@@ -5,12 +5,23 @@
 #include <stdint.h>
 
 #define IDLE_STATE (1)
-#define UNIT  (330)
-#define SHORT (UNIT*2)
-#define LONG  (UNIT*9)
+#define UNIT       (330)
+#define SHORT      (UNIT*2)
+#define LONG       (UNIT*9)
+#define DEAD_TIME  (9300)
+#define TRAME_TIME ((SHORT+LONG)*8)
 
-struct Trame {
-    enum {
+
+class FakeRemote {
+public:
+    FakeRemote(Pin _pin)
+    : pin (_pin)
+    {
+        init();
+    }
+    ~FakeRemote() { }
+
+    typedef enum Trame {
         droite  = 0x81,
         avant   = 0x82,
         speed   = 0x83,
@@ -23,21 +34,10 @@ struct Trame {
         docking = 0x8A,
         _auto   = 0x8C,
         pause   = 0x8D,
-    };
-};
-
-class FakeRemote {
-public:
-    FakeRemote(Pin _pin)
-    : pin (_pin)
-    {
-        init();
-    }
-    ~FakeRemote() { }
+    } trame_t;
 
     void init();
-    void send_trame(uint8_t trame);
-
+    void send_trame(trame_t trame);
 
 private:
     const Pin  pin;

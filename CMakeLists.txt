@@ -27,15 +27,16 @@ add_subdirectory(
 # Déclaration des sources de la librairie
 add_library(${PROJECT_NAME}Lib STATIC
     fake_remote.cpp
+    pilot.cpp
 )
 
 # Includes publics
 target_include_directories(${PROJECT_NAME}Lib INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
 )
-#target_link_libraries(${PROJECT_NAME}Lib INTERFACE
-#    m
-#)
+target_link_libraries(${PROJECT_NAME}Lib INTERFACE
+    m
+)
 
 # Librairie à linker
 export(TARGETS ${PROJECT_NAME}Lib FILE Librairie.cmake)

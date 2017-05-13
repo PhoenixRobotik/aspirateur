@@ -17,7 +17,7 @@ void FakeRemote::set_gpio(bool on) {
         : gpio_clear(pin.port->Id, pin.number);
 }
 
-void FakeRemote::send_trame(uint8_t trame) {
+void FakeRemote::send_trame(trame_t trame) {
     for (int i = 8; i > 0; --i)
     {
         uint8_t state = (trame >> (i-1)) & 0x01;
@@ -27,5 +27,5 @@ void FakeRemote::send_trame(uint8_t trame) {
         kiwi->sleep_us(state == 1 ? SHORT : LONG);
     }
     set_gpio(IDLE_STATE);
-    kiwi->sleep_us(9300);
+    kiwi->sleep_us(DEAD_TIME);
 }
