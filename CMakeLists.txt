@@ -28,6 +28,7 @@ add_subdirectory(
 add_library(${PROJECT_NAME}Lib STATIC
     fake_remote.cpp
     pilot.cpp
+    reception.cpp
 )
 
 # Includes publics
