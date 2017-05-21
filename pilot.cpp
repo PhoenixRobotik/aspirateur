@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 
-void Pilot::reach(target_type_t target_type, float value)
+void Pilot::reach(TargetType target_type, float value)
 {
     float time_us;
     switch(target_type) {
@@ -28,16 +28,16 @@ void Pilot::reach(target_type_t target_type, float value)
     }
 }
 
-void Pilot::go(direction_t direction, float time_us) {
+void Pilot::go(Direction direction, float time_us) {
     
     if (time_us < UNIT_TIME_us) {
         time_us = UNIT_TIME_us;
     }
     
     uint32_t trame_cpt  = static_cast<uint32_t>(std::round(time_us/UNIT_TIME_us));
-    uint32_t crumb_time = static_cast<uint32_t>(std::round(time_us) - trame_cpt*UNIT_TIME_us);
+    uint32_t crumb_time = static_cast<uint32_t>(std::round(time_us) - trame_cpt * UNIT_TIME_us);
     
-    for (uint i = 0; i < trame_cpt; i++) {
+    for (uint32_t i = 0; i < trame_cpt; i++) {
         remote->send_trame((FakeRemote::Trame) direction);
     }
 

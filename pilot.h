@@ -3,19 +3,19 @@
 #include "fake_remote.h"
 
 //m.s-1
-#define DIST_MAX_SPEED      (0.209)
+static const double DIST_MAX_SPEED   (0.209);
 //m.s-2 (unused)
-#define DIST_ACC            (1000)
+static const int DIST_ACC            (1000);
 //m.s-2 (unused)
-#define DIST_DEC            (1000)
+static const int DIST_DEC            (1000);
 //deg.s-1
-#define ANGL_MAX_SPEED      (92)
+static const int ANGL_MAX_SPEED      (92);
 //deg.s-2 (unused)
-#define ANGL_ACC            (1000)
+static const int ANGL_ACC            (1000);
 //deg.s-2 (unused)
-#define ANGL_DEC            (1000)
+static const int ANGL_DEC            (1000);
 // time offset due to trame sending
-#define UNIT_TIME_us (DEAD_TIME + TRAME_TIME)
+static const int UNIT_TIME_us (DEAD_TIME + TRAME_TIME);
 
 
 
@@ -28,23 +28,27 @@ public:
     }
     ~Pilot() { }
 
-    typedef enum Direction {
+    enum Direction {
         right     = FakeRemote::Trame::droite,
         left      = FakeRemote::Trame::gauche,
         frontward = FakeRemote::Trame::avant,
         backward  = FakeRemote::Trame::arriere,
-    } direction_t;
+    };
 
-    typedef enum TargetType {
+    enum class TargetType {
         angle,
         distance,
-    } target_type_t;
+    };
 
     void init() {}
-    void reach(target_type_t target_type, float value);
+    void reach(TargetType target_type, float value);
 
 private:
     std::shared_ptr<FakeRemote> remote;
 
-    void go(direction_t direction, float time_us);
+    void go(Direction direction, float time_us);
+
+    Direction current;
+    float current_time_us_elapsed;
+    float current_time_us_elapsed;
 };

@@ -2,7 +2,9 @@
 #include "fake_remote.h"
 #include "pilot.h"
 #include "reception.h"
+#include "event.h"
 
+#include <queue>
 
 std::unique_ptr<BoardKiwi> kiwi = 0;
 
@@ -26,18 +28,28 @@ int main(int argc, char const *argv[])
 
     kiwi->statusLed.set(false);
 
-    while(1)
-    {
-        pilot.reach(Pilot::TargetType::distance,  1);
-        kiwi->sleep_ms(500);
-        pilot.reach(Pilot::TargetType::angle,  360);
-        kiwi->sleep_ms(500);
-        pilot.reach(Pilot::TargetType::distance, -1);
-        kiwi->sleep_ms(500);
-        pilot.reach(Pilot::TargetType::angle,  -360);
-        kiwi->sleep_ms(500);
-        kiwi->activeLed.toggle();
+    std::queue<Event> events({
+        Event::Move(Pilot::TargetType::distance, 1),
+        Event::Move(Pilot::TargetType::angle,  360),
+        Event::Move(Pilot::TargetType::distance, -1),
+        Event::Move(Pilot::TargetType::angle,  -360),
+    });
+
+    Event currentEvent;
+    bool needsReexecute = false;
+
+    while (true) {
+        // Handle interrupts here
+
+        if (needsReexecute)
+            needsReexecute = currentEvent.execute(*kiwi, pilot);
+        else if (!events.empty()) {
+            currentEvent = events.back();
+            events.pop();
+        }
     }
+
+
     while(1);
     return 0;
 }

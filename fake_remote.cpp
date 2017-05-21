@@ -17,14 +17,15 @@ void FakeRemote::set_gpio(bool on) {
         : gpio_clear(pin.port->Id, pin.number);
 }
 
-void FakeRemote::send_trame(trame_t trame) {
+void FakeRemote::send_trame(Trame trame) {
     for (int i = 8; i > 0; --i)
     {
-        uint8_t state = (trame >> (i-1)) & 0x01;
+        bool state = ((trame >> (i-1)) & 0x01) == 1;
+
         set_gpio(false);
-        kiwi->sleep_us(state == 1 ? LONG : SHORT);
+        kiwi->sleep_us(state ? LONG : SHORT);
         set_gpio(true);
-        kiwi->sleep_us(state == 1 ? SHORT : LONG);
+        kiwi->sleep_us(state ? SHORT : LONG);
     }
     set_gpio(IDLE_STATE);
     kiwi->sleep_us(DEAD_TIME);
