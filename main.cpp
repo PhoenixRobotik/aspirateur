@@ -11,11 +11,10 @@ std::unique_ptr<BoardKiwi> kiwi = 0;
 
 int main(int argc, char const *argv[])
 {
+    // init everything
     kiwi = std::make_unique<BoardKiwi>();
     auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p3));
     Pilot pilot(fake_remote);
-    kiwi->statusLed.set(true);
-
 
     InterruptSubscriber CAN_Rx1_interrupt(&InterruptCANRx1,
         &CAN_Rx1_interrupt_handler);
@@ -24,10 +23,15 @@ int main(int argc, char const *argv[])
     CAN_Rx1_interrupt.subscribe();
     
     // waits for vacuum cleaner main's board initialisation
+    kiwi->statusLed.set(true);
     kiwi->sleep_ms(6500);
-
     kiwi->statusLed.set(false);
 
+    // attend la tirette
+    while(kiwi->tirette.read() == 0);
+    kiwi->activeLed.set(true);
+
+    // just for test, TODO : remove
     fake_remote->send_trame(FakeRemote::Trame::avant);
 
     std::queue<Event> events({

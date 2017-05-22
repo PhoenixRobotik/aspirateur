@@ -15,8 +15,11 @@ class BoardKiwi
 public:
     BoardKiwi()
     : System()
-    , activeLed(Pin(PortF, Pin::p0), GPIO::IOMode::output)
-    , statusLed(Pin(PortF, Pin::p1), GPIO::IOMode::output)
+    , activeLed(Pin(PortF, Pin::p0 ), GPIO::IOMode::output)
+    , statusLed(Pin(PortF, Pin::p1 ), GPIO::IOMode::output)
+    , tirette  (Pin(PortA, Pin::p2 ), GPIO::IOMode::input )
+    , bumper1  (Pin(PortA, Pin::p10), GPIO::IOMode::input )
+    , bumper2  (Pin(PortA, Pin::p9 ), GPIO::IOMode::input )
     , canBus(&periphCAN,
             Pin(PortA, Pin::p11), AltFunction::f9,
             Pin(PortA, Pin::p12), AltFunction::f9)
@@ -33,6 +36,7 @@ public:
     { }
 
     GPIO activeLed, statusLed;
+    GPIO tirette, bumper1, bumper2;
     CANBus canBus;
     PWM pwmServo1, pwmServo2;
 
