@@ -60,9 +60,11 @@ public:
     bool execute(BoardKiwi& kiwi, Pilot& pilot) {
         switch(type) {
         case Type::Move:
-            bool finished = pilot.reach(moveType,  moveValue);
+            // bool finished = 
+            pilot.reach(moveType,  moveValue);
             kiwi.sleep_ms(500);
-            return finished;
+            // return finished;
+            return true;
 
         case Type::Sleep:
             kiwi.sleep_ms(duration);

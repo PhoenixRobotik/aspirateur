@@ -28,6 +28,8 @@ int main(int argc, char const *argv[])
 
     kiwi->statusLed.set(false);
 
+    fake_remote->send_trame(FakeRemote::Trame::avant);
+
     std::queue<Event> events({
         Event::Move(Pilot::TargetType::distance, 1),
         Event::Move(Pilot::TargetType::angle,  360),
