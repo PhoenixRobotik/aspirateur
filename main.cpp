@@ -12,7 +12,7 @@ std::unique_ptr<BoardKiwi> kiwi = 0;
 int main(int argc, char const *argv[])
 {
     kiwi = std::make_unique<BoardKiwi>();
-    auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p6));
+    auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p3));
     Pilot pilot(fake_remote);
     kiwi->statusLed.set(true);
 
