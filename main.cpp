@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
         // Handle interrupts here
 
         if (needsReexecute)
-            needsReexecute = currentEvent.execute(*kiwi, pilot);
+            needsReexecute = not currentEvent.execute(*kiwi, pilot);
         else if (!events.empty()) {
             currentEvent = events.back();
             events.pop();
