@@ -42,5 +42,9 @@ void Pilot::go(Direction direction, float time_us) {
     }
 
     kiwi->sleep_us(crumb_time);
+    stop();
+}
+
+void Pilot::stop() {
     remote->send_trame(FakeRemote::Trame::pause);
 }

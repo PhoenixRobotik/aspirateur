@@ -42,6 +42,7 @@ public:
 
     void init() {}
     void reach(TargetType target_type, float value);
+    void stop();
 
 private:
     std::shared_ptr<FakeRemote> remote;
@@ -49,6 +50,5 @@ private:
     void go(Direction direction, float time_us);
 
     Direction current;
-    float current_time_us_elapsed;
     float current_time_us_elapsed;
 };
