@@ -65,7 +65,7 @@ int main(int argc, char const *argv[])
     while (true) {
         // Handle interrupts here
         if ((kiwi->bumper1.read() == 0) or (kiwi->bumper2.read() == 0)) {
-            fake_remote->send_trame(FakeRemote::Trame::pause);
+            pilot.stop();
         }
 
         if (needsReexecute)
