@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
 
     CAN_Rx1_interrupt.provider->setPriority(0);
     CAN_Rx1_interrupt.subscribe();
-    
+
     // waits for vacuum cleaner main's board initialisation
     kiwi->statusLed.set(true);
     kiwi->sleep_ms(6500);
@@ -33,6 +33,9 @@ int main(int argc, char const *argv[])
 
     // just for test, TODO : remove
     fake_remote->send_trame(FakeRemote::Trame::avant);
+    kiwi->ServoBras1.setPercent(10);
+    kiwi->ServoBras2.setPercent(10);
+    kiwi->ServoFunnyAction.setPercent(10);
 
     std::queue<Event> events({
         Event::Move(Pilot::TargetType::distance, 1),

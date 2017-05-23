@@ -23,10 +23,15 @@ public:
     , canBus(&periphCAN,
             Pin(PortA, Pin::p11), AltFunction::f9,
             Pin(PortA, Pin::p12), AltFunction::f9)
-    , pwmServo1(&Timer3, TIM_OC3,
+    , ServoBras1(&Timer3, TIM_OC3,
             Pin(PortB, Pin::p0), AltFunction::f2)
-    , pwmServo2(&Timer3, TIM_OC1,
+    , ServoBras2(&Timer3, TIM_OC1,
             Pin(PortA, Pin::p6), AltFunction::f2)
+    // pas fonctionnel avec le TIM2 : TODO : debug
+    // , ServoFunnyAction(&Timer2, TIM_OC2,
+    //         Pin(PortA, Pin::p1), AltFunction::f1)
+    , ServoFunnyAction(&Timer1, TIM_OC1,
+            Pin(PortA, Pin::p8), AltFunction::f6)
     // , usart1(USART1,
     //         Pin(PortB, Pin::p7),
     //         Pin(PortB, Pin::p6))
@@ -38,7 +43,7 @@ public:
     GPIO activeLed, statusLed;
     GPIO tirette, bumper1, bumper2;
     CANBus canBus;
-    PWM pwmServo1, pwmServo2;
+    PWM ServoBras1, ServoBras2, ServoFunnyAction;
 
 
     // USART usart1, usart2;
