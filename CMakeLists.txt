@@ -28,6 +28,7 @@ add_subdirectory(
 add_library(${PROJECT_NAME}Lib STATIC
     bumper.cpp
     fake_remote.cpp
+    funny_action.cpp
     pilot.cpp
     reception.cpp
 )

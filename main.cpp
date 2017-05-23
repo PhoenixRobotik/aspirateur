@@ -1,6 +1,7 @@
 #include "board_kiwi.h"
 #include "bumper.h"
 #include "fake_remote.h"
+#include "funny_action.h"
 #include "pilot.h"
 #include "reception.h"
 #include "event.h"
@@ -30,6 +31,8 @@ int main(int argc, char const *argv[])
     EXTI5_to_9_interrupt.subscribe();
     EXTI10_to_15_interrupt.subscribe();
 
+    FunnyAction funny_action;
+
     // waits for vacuum cleaner main's board initialisation
     kiwi->statusLed.set(true);
     kiwi->sleep_ms(6500);
@@ -41,9 +44,11 @@ int main(int argc, char const *argv[])
 
     // just for test, TODO : remove
     fake_remote->send_trame(FakeRemote::Trame::avant);
-    kiwi->ServoBras1.setPercent(10);
-    kiwi->ServoBras2.setPercent(10);
-    kiwi->ServoFunnyAction.setPercent(10);
+    kiwi->ServoBras2.setMicrosec(400);
+    kiwi->ServoBras1.setMicrosec(400);
+    kiwi->sleep_ms(2000);
+    kiwi->ServoBras1.setMicrosec(2500);
+    funny_action.launch();
 
     std::queue<Event> events({
         Event::Move(Pilot::TargetType::distance, 1),
