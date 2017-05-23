@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
     kiwi->activeLed.set(true);
 
     // just for test, TODO : remove
-    fake_remote->send_trame(FakeRemote::Trame::avant);
+    // fake_remote->send_trame(FakeRemote::Trame::avant);
     //kiwi->ServoBras1.setMicrosec(400);
     //kiwi->sleep_ms(2000);
     //kiwi->ServoBras1.setMicrosec(2500);
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[])
     });
 
     Event currentEvent;
-    bool needsReexecute = false;
+    bool end_of_event = false;
 
     while (true) {
         // Handle interrupts here
@@ -68,10 +68,11 @@ int main(int argc, char const *argv[])
             pilot.stop();
         }
 
-        if (needsReexecute)
-            needsReexecute = not currentEvent.execute(*kiwi, pilot);
+        if (not end_of_event)
+            end_of_event = currentEvent.execute(*kiwi, pilot);
         else if (!events.empty()) {
-            currentEvent = events.back();
+            end_of_event = false;
+            currentEvent = events.front();
             events.pop();
         }
     }
