@@ -48,7 +48,7 @@ int main(int argc, char const *argv[])
     //kiwi->ServoBras1.setMicrosec(400);
     //kiwi->sleep_ms(2000);
     //kiwi->ServoBras1.setMicrosec(2500);
-    funny_action.launch();
+    // funny_action.launch();
     // bras1.move(0);
     // bras2.move(0);
 
@@ -64,6 +64,9 @@ int main(int argc, char const *argv[])
 
     while (true) {
         // Handle interrupts here
+        if ((kiwi->bumper1.read() == 0) or (kiwi->bumper2.read() == 0)) {
+            fake_remote->send_trame(FakeRemote::Trame::pause);
+        }
 
         if (needsReexecute)
             needsReexecute = not currentEvent.execute(*kiwi, pilot);
