@@ -1,4 +1,5 @@
 #include "board_kiwi.h"
+#include "bras.h"
 #include "bumper.h"
 #include "fake_remote.h"
 #include "funny_action.h"
@@ -20,10 +21,8 @@ int main(int argc, char const *argv[])
 
     InterruptSubscriber CAN_Rx1_interrupt(&InterruptCANRx1,
         &CAN_Rx1_interrupt_handler);
-
     InterruptSubscriber EXTI5_to_9_interrupt(&InterruptEXTI5_to_9,
         &EXTI5_to_9_interrupt_handler);
-
     InterruptSubscriber EXTI10_to_15_interrupt(&InterruptEXTI10_to_15,
         &EXTI10_to_15_interrupt_handler);
 
@@ -32,6 +31,8 @@ int main(int argc, char const *argv[])
     EXTI10_to_15_interrupt.subscribe();
 
     FunnyAction funny_action;
+    Bras bras2(&(kiwi->ServoBras2), true);
+    Bras bras1(&(kiwi->ServoBras1), false);
 
     // waits for vacuum cleaner main's board initialisation
     kiwi->statusLed.set(true);
@@ -44,11 +45,12 @@ int main(int argc, char const *argv[])
 
     // just for test, TODO : remove
     fake_remote->send_trame(FakeRemote::Trame::avant);
-    kiwi->ServoBras2.setMicrosec(400);
-    kiwi->ServoBras1.setMicrosec(400);
-    kiwi->sleep_ms(2000);
-    kiwi->ServoBras1.setMicrosec(2500);
+    //kiwi->ServoBras1.setMicrosec(400);
+    //kiwi->sleep_ms(2000);
+    //kiwi->ServoBras1.setMicrosec(2500);
     funny_action.launch();
+    // bras1.move(0);
+    // bras2.move(0);
 
     std::queue<Event> events({
         Event::Move(Pilot::TargetType::distance, 1),

@@ -26,6 +26,7 @@ add_subdirectory(
 ## Déclaration de la librairie aux projets qui utilisent celui-ci
 # Déclaration des sources de la librairie
 add_library(${PROJECT_NAME}Lib STATIC
+    bras.cpp
     bumper.cpp
     fake_remote.cpp
     funny_action.cpp
