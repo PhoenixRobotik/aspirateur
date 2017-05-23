@@ -1,4 +1,5 @@
 #include "board_kiwi.h"
+#include "bumper.h"
 #include "fake_remote.h"
 #include "pilot.h"
 #include "reception.h"
@@ -19,8 +20,15 @@ int main(int argc, char const *argv[])
     InterruptSubscriber CAN_Rx1_interrupt(&InterruptCANRx1,
         &CAN_Rx1_interrupt_handler);
 
-    CAN_Rx1_interrupt.provider->setPriority(0);
+    InterruptSubscriber EXTI5_to_9_interrupt(&InterruptEXTI5_to_9,
+        &EXTI5_to_9_interrupt_handler);
+
+    InterruptSubscriber EXTI10_to_15_interrupt(&InterruptEXTI10_to_15,
+        &EXTI10_to_15_interrupt_handler);
+
     CAN_Rx1_interrupt.subscribe();
+    EXTI5_to_9_interrupt.subscribe();
+    EXTI10_to_15_interrupt.subscribe();
 
     // waits for vacuum cleaner main's board initialisation
     kiwi->statusLed.set(true);
