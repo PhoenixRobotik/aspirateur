@@ -14,6 +14,8 @@ public:
     void pause();
     void resume();
     int32_t get_us();
+    bool is_paused();
+    bool is_running();
 
 private:
     int32_t m_substract_time;

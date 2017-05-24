@@ -30,3 +30,13 @@ int32_t TimeCpt::get_us() {
 		return SYSTICK_TO_MICROS(kiwi->getSysTick() - m_substract_time);
 	}
 }
+
+bool TimeCpt::is_paused()
+{
+	return m_paused;
+}
+
+bool TimeCpt::is_running()
+{
+	return not m_paused;
+}
