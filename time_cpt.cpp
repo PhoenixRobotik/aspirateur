@@ -19,7 +19,7 @@ void TimeCpt::resume() {
 	m_paused = false;
 }
 
-uint32_t TimeCpt::get_us() {
+int32_t TimeCpt::get_us() {
 	if (m_paused) {
 		return SYSTICK_TO_MICROS(m_pause_time - m_substract_time);
 	} else {

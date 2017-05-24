@@ -13,10 +13,10 @@ public:
     void reset();
     void pause();
     void resume();
-    uint32_t get_us();
+    int32_t get_us();
 
 private:
-    uint32_t m_substract_time;
-    uint32_t m_pause_time;
+    int32_t m_substract_time;
+    int32_t m_pause_time;
     bool m_paused;
 };

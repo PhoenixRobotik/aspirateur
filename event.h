@@ -30,7 +30,7 @@ public:
         event.moveValue = value;
         return event;
     }
-    static Event Sleep(uint32_t duration) {
+    static Event Sleep(int32_t duration) {
         Event event;
         event.type = Type::Sleep;
         event.duration = duration;

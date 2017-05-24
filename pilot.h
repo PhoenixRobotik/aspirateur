@@ -54,6 +54,6 @@ private:
     void compute(TargetType, float value);
 
     Direction m_current_direction;
-    uint32_t m_time_needed_us;
+    int32_t m_time_needed_us;
     TimeCpt* m_time_server;
 };

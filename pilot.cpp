@@ -36,7 +36,7 @@ void Pilot::compute(TargetType target_type, float value)
             }
             break;
     }
-    m_time_needed_us = static_cast<uint32_t>(std::round(time_needed_us));
+    m_time_needed_us = static_cast<int32_t>(std::round(time_needed_us));
     if (m_time_needed_us < UNIT_TIME_us) {
         m_time_needed_us = UNIT_TIME_us;
     }
