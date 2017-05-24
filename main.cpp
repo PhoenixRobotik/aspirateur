@@ -6,6 +6,7 @@
 #include "pilot.h"
 #include "reception.h"
 #include "event.h"
+#include "time_cpt.h"
 
 #include <queue>
 

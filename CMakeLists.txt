@@ -32,6 +32,7 @@ add_library(${PROJECT_NAME}Lib STATIC
     funny_action.cpp
     pilot.cpp
     reception.cpp
+    time_cpt.cpp
 )
 
 # Includes publics
