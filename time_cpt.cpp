@@ -10,13 +10,17 @@ void TimeCpt::reset() {
 }
 
 void TimeCpt::pause() {
-	m_pause_time = kiwi->getSysTick();
-	m_paused = true;
+	if (not m_paused) {
+		m_pause_time = kiwi->getSysTick();
+		m_paused = true;
+	}
 }
 
 void TimeCpt::resume() {
-	m_substract_time += kiwi->getSysTick() - m_pause_time;
-	m_paused = false;
+	if (m_paused) {
+		m_substract_time += kiwi->getSysTick() - m_pause_time;
+		m_paused = false;
+	}	
 }
 
 int32_t TimeCpt::get_us() {
