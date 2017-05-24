@@ -57,32 +57,31 @@ public:
 
     // Gets passed references
     // Returns "finished", as "does not need to be called again"
-    bool execute(BoardKiwi& kiwi, Pilot& pilot) {
+    bool execute(BoardKiwi& kiwi, Pilot& pilot, bool event_is_new) {
+        bool finished = true;
         switch(type) {
         case Type::Move:
-            // bool finished = 
-            pilot.reach(moveType,  moveValue);
-            kiwi.sleep_ms(500);
-            // return finished;
-            return true;
+            finished = pilot.reach(moveType,  moveValue, event_is_new);
+            // kiwi.sleep_ms(500);
+            return finished;
 
         case Type::Sleep:
             kiwi.sleep_ms(duration);
-            return true;
+            return finished;
 
         case Type::ServoG:
 
-            return true;
+            return finished;
 
         case Type::ServoD:
 
-            return true;
+            return finished;
 
         case Type::XL320:
 
-            return true;
+            return finished;
         }
-        return true;
+        return finished;
     }
 
 };

@@ -18,7 +18,8 @@ int main(int argc, char const *argv[])
     // init everything
     kiwi = std::make_unique<BoardKiwi>();
     auto fake_remote = std::make_shared<FakeRemote>(Pin(PortB, Pin::p3));
-    Pilot pilot(fake_remote);
+    TimeCpt time_server;
+    Pilot pilot(fake_remote, &time_server);
 
     InterruptSubscriber CAN_Rx1_interrupt(&InterruptCANRx1,
         &CAN_Rx1_interrupt_handler);
@@ -61,7 +62,8 @@ int main(int argc, char const *argv[])
     });
 
     Event currentEvent;
-    bool end_of_event = false;
+    bool end_of_event = true;
+
 
     while (true) {
         // Handle interrupts here
@@ -70,11 +72,11 @@ int main(int argc, char const *argv[])
         }
 
         if (not end_of_event)
-            end_of_event = currentEvent.execute(*kiwi, pilot);
+            end_of_event = currentEvent.execute(*kiwi, pilot, false);
         else if (!events.empty()) {
-            end_of_event = false;
             currentEvent = events.front();
             events.pop();
+            end_of_event = currentEvent.execute(*kiwi, pilot, true);
         }
     }
 

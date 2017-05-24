@@ -1,5 +1,7 @@
 #pragma once
 
+#include "time_cpt.h"
+
 #include "fake_remote.h"
 
 //m.s-1
@@ -21,8 +23,9 @@ static const int UNIT_TIME_us (DEAD_TIME + TRAME_TIME);
 
 class Pilot {
 public:
-    Pilot(std::shared_ptr<FakeRemote> _remote)
+    Pilot(std::shared_ptr<FakeRemote> _remote, TimeCpt* _time_server)
     : remote (_remote)
+    , m_time_server (_time_server)
     {
         init();
     }
@@ -41,14 +44,16 @@ public:
     };
 
     void init() {}
-    void reach(TargetType target_type, float value);
+    bool reach(TargetType target_type, float value, bool target_is_new);
     void stop();
 
 private:
     std::shared_ptr<FakeRemote> remote;
 
-    void go(Direction direction, float time_us);
+    bool go();
+    void compute(TargetType, float value);
 
-    Direction current;
-    float current_time_us_elapsed;
+    Direction m_current_direction;
+    uint32_t m_time_needed_us;
+    TimeCpt* m_time_server;
 };

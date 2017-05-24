@@ -13,7 +13,7 @@ public:
     void reset();
     void pause();
     void resume();
-    uint32_t get();
+    uint32_t get_us();
 
 private:
     uint32_t m_substract_time;

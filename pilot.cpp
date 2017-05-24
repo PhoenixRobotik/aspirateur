@@ -5,44 +5,56 @@
 #include <stdint.h>
 
 
-void Pilot::reach(TargetType target_type, float value)
+
+bool Pilot::reach(TargetType target_type, float value, bool target_is_new)
 {
-    float time_us;
+    if (target_is_new) {
+        compute(target_type, value);
+        m_time_server->reset();
+    }
+    return go();
+}
+
+void Pilot::compute(TargetType target_type, float value)
+{
+    float time_needed_us;
     switch(target_type) {
         case TargetType::angle:
-            time_us = std::abs(1000000.0*value/ANGL_MAX_SPEED);
+            time_needed_us = std::abs(1000000.0*value/ANGL_MAX_SPEED);
             if (value < 0) {
-                go(right, time_us);
+                m_current_direction = right;
             } else if (value > 0) {
-                go(left, time_us);
+                m_current_direction = left;
             }
             break;
         case TargetType::distance:
-            time_us = std::abs(1000000.0*value/DIST_MAX_SPEED);
+            time_needed_us = std::abs(1000000.0*value/DIST_MAX_SPEED);
             if (value < 0) {
-                go(backward, time_us);
+                m_current_direction = backward;
             } else if (value > 0) {
-                go(frontward, time_us);
+                m_current_direction = frontward;
             }
             break;
     }
+    m_time_needed_us = static_cast<uint32_t>(std::round(time_needed_us));
+    if (m_time_needed_us < UNIT_TIME_us) {
+        m_time_needed_us = UNIT_TIME_us;
+    }
 }
 
-void Pilot::go(Direction direction, float time_us) {
-    
-    if (time_us < UNIT_TIME_us) {
-        time_us = UNIT_TIME_us;
+bool Pilot::go() {
+    int32_t remaining_time = m_time_needed_us - m_time_server->get_us();
+    if (remaining_time <= 0 ) {
+        stop();
+        return true;
+    } else if (remaining_time < TRAME_TIME) {
+        kiwi->sleep_us(remaining_time);
+        stop();
+        return true;
+    } else {
+        remote->send_trame((FakeRemote::Trame) m_current_direction);
+        return false;
     }
-    
-    uint32_t trame_cpt  = static_cast<uint32_t>(std::round(time_us/UNIT_TIME_us));
-    uint32_t crumb_time = static_cast<uint32_t>(std::round(time_us) - trame_cpt * UNIT_TIME_us);
-    
-    for (uint32_t i = 0; i < trame_cpt; i++) {
-        remote->send_trame((FakeRemote::Trame) direction);
-    }
-
-    kiwi->sleep_us(crumb_time);
-    stop();
 }
 
 void Pilot::stop() {
