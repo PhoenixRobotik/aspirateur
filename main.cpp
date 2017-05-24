@@ -66,17 +66,32 @@ int main(int argc, char const *argv[])
 
 
     while (true) {
-        // Handle interrupts here
+        // bumper handling
         if ((kiwi->bumper1.read() == 0) or (kiwi->bumper2.read() == 0)) {
+            time_server.pause();
             pilot.stop();
+            bool bumper_triggered = true;
+            while(bumper_triggered) {
+                // debouncing
+                for (int i = 0; i < 10; ++i)
+                {
+                    bumper_triggered = bumper_triggered or
+                                    ((kiwi->bumper1.read() == 0) or (kiwi->bumper2.read() == 0));
+                    kiwi->sleep_ms(1);
+                }
+            }
+            time_server.resume();
         }
 
-        if (not end_of_event)
+        if (end_of_event) {
+            if (!events.empty()) {
+                currentEvent = events.front();
+                events.pop();
+                end_of_event = currentEvent.execute(*kiwi, pilot, true);
+            }
+        }
+        else {
             end_of_event = currentEvent.execute(*kiwi, pilot, false);
-        else if (!events.empty()) {
-            currentEvent = events.front();
-            events.pop();
-            end_of_event = currentEvent.execute(*kiwi, pilot, true);
         }
     }
 
